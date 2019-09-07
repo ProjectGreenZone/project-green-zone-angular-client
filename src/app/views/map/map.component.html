@@ -1,0 +1,13 @@
+<div class="row ml-0 mr-0">
+  <div class="col">
+    <div style="height: 300px;"
+      leaflet
+      [leafletOptions]="options"
+      [leafletLayersControl]="layersControl"
+      [leafletLayers]="layers">
+    </div>
+    <div *ngIf="showLayer" [leafletLayer]="layer"></div>
+    <a (click)="sendMessage()" class="btn btn-info"> TEST</a>
+  </div>
+</div>
+

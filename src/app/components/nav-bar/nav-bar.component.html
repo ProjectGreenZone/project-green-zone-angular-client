@@ -1,0 +1,76 @@
+<!-- <nav>
+  <div class="nav-wrapper container">
+    <a [routerLink]="['/map']" class="brand-logo"> Give My Space </a>
+    <a (click)="onShowSideBar()" data-target="#mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <ul class="right hide-on-med-and-down">
+      <li><a [routerLink]="['/map']" routerLinkActive="active">Map</a></li>
+      <li><a [routerLink]="['/trackers']" routerLinkActive="active">Trackers</a></li>
+      <li><a (click)="logOut()" class="waves-effect waves-light btn">Logout</a></li>
+    </ul>
+  </div>
+</!-->
+
+<!-- <ul [style.transform]="showSideBar? 'translateX(0%)' : 'translateX(-105%)'" class="sidenav" id="mobile-demo">
+  <li><a (click)="onCloseSideBar()" class="waves-effect waves-dark btn red" >Back</a></li>
+  <li><a [routerLink]="['/map']" routerLinkActive="active">Map</a></li>
+  <li><a [routerLink]="['/trackers']" routerLinkActive="active">Trackers</a></li>
+  <li><a (click)="logOut()" class="waves-effect waves-light btn">Logout</a></li>
+</!-->
+
+
+<nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
+    <div class="container-fluid">
+      <!-- Toggler -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- Brand -->
+      <a [routerLink]="['/map']" class="navbar-brand pt-0">
+        <img src="./assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
+      </a>
+
+      <!-- Collapse -->
+      <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+        <!-- Collapse header -->
+        <div class="navbar-collapse-header d-md-none">
+          <div class="row">
+            <div class="col-6 collapse-brand">
+              <a href="./index.html">
+                <img src="./assets/img/brand/blue.png">
+              </a>
+            </div>
+            <div class="col-6 collapse-close">
+              <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle sidenav">
+                <span></span>
+                <span></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a [routerLink]="['/map']" class="nav-link ">
+              <i class="ni ni-pin-3 text-orange"></i> Map
+            </a>
+          </li>
+          <li class="nav-item">
+            <a [routerLink]="['/trackers']" class="nav-link ">
+              <i class="ni ni-bullet-list-67 text-red"></i> Trackers
+            </a>
+          </li>
+        </ul>
+
+        <!-- Divider -->
+        <hr class="my-3">
+        <ul class="navbar-nav mb-md-3">
+            <li class="nav-item">
+              <a class="nav-link text-light btn btn-danger">
+                <i class="ni ni-user-run"></i> Logout
+              </a>
+        </ul>
+
+      </div>
+    </div>
+  </nav>
