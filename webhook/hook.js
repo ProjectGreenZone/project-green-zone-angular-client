@@ -1,5 +1,5 @@
 // Listen on port 9001
-var PORT = 9001
+var PORT = 9002
 var HOOK_SCRIPT = './hook.sh'
 var gith = require('gith').create( PORT );
 // Import execFile, to run our bash script
