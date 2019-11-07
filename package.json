@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "deploy": "ng build --outputPath=./build --deploy-url /gz && git add * && git commit -m 'deploying' && git push",
+    "deploy": "ng build --outputPath=./build --base-href /gz --deploy-url /gz && git add * && git commit -m \"deploying\" && git push",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
