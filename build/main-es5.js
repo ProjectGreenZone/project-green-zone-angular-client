@@ -63,7 +63,7 @@ module.exports = "<div class=\"main-content\">\n\n  <!-- Header -->\n  <div clas
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row ml-0 mr-0\">\n  <div class=\"col\">\n    <div style=\"height: 300px;\"\n      leaflet\n      [leafletOptions]=\"options\"\n      [leafletLayersControl]=\"layersControl\"\n      [leafletLayers]=\"layers\"\n      [(leafletCenter)]=\"mapCenter\">\n    </div>\n    <!-- <div *ngIf=\"showLayer\" [leafletLayer]=\"layer\"></div> -->\n    <a (click)=\"sendMessage()\" class=\"btn btn-info\"> TEST</a>\n    <a (click)=\"trackMe()\" class=\"btn btn-danger\"> Track : {{isTracking}}</a>\n  </div>\n</div>\n\n"
+module.exports = "<div class=\"row ml-0 mr-0\">\n  <div class=\"col\">\n    <div style=\"height: 300px;\"\n      leaflet\n      [leafletOptions]=\"options\"\n      [leafletLayersControl]=\"layersControl\"\n      [leafletLayers]=\"layers\"\n      [(leafletCenter)]=\"mapCenter\">\n    </div>\n    <!-- <div *ngIf=\"showLayer\" [leafletLayer]=\"layer\"></div> -->\n    <a (click)=\"sendMessage()\" class=\"btn btn-info\"> TEST</a>\n    <a (click)=\"trackMe()\" class=\"btn btn-danger\"> Track asds : {{isTracking}}</a>\n  </div>\n</div>\n\n"
 
 /***/ }),
 
