@@ -1,4 +1,6 @@
-# GiveMySpaceWebapp
+# Project Green Zone Client(Angular)
+
+Please find the server serving endpoints for this client application at [ProjectGreenZone/project-green-zone-nodejs-server](https://github.com/ProjectGreenZone/project-green-zone-nodejs-server)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.0.
 
