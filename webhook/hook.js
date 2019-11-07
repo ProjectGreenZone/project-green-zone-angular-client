@@ -7,7 +7,7 @@ var execFile = require('child_process').exec;
 
 console.log("Stated listening for webhooks on port "+PORT);
 gith({
-    repo: 'ProjectGreenZone/project-green-zone-nodejs-server'
+    repo: 'ProjectGreenZone/project-green-zone-angular-client'
 }).on( 'all', function( payload ) {
     if( payload.branch === 'master' )
     {
