@@ -4,10 +4,12 @@
       leaflet
       [leafletOptions]="options"
       [leafletLayersControl]="layersControl"
-      [leafletLayers]="layers">
+      [leafletLayers]="layers"
+      [(leafletCenter)]="mapCenter">
     </div>
-    <div *ngIf="showLayer" [leafletLayer]="layer"></div>
+    <!-- <div *ngIf="showLayer" [leafletLayer]="layer"></div> -->
     <a (click)="sendMessage()" class="btn btn-info"> TEST</a>
+    <a (click)="trackMe()" class="btn btn-danger"> Track : {{isTracking}}</a>
   </div>
 </div>
 

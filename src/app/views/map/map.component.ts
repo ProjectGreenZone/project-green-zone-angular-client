@@ -22,7 +22,7 @@ export class MapComponent implements OnInit, OnDestroy {
     layers: [
       tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
     ],
-    zoom: 5,
+    zoom: 14,
     center: latLng(46.879966, -121.726909)
   };
   layersControl = {
@@ -36,12 +36,13 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   };
 
-  layers = [
-    circle([ 46.95, -122 ], { radius: 5000 }),
-    polygon([[ 46.8, -121.85 ], [ 46.92, -121.92 ], [ 46.87, -121.8 ]]),
-    marker([ 46.879966, -121.726909 ])
-];
+  layers = [];
 
+  mapCenter = latLng(46.879966, -121.726909);
+  isTracking = false;
+  trackingID = 0;
+  myLocation = {postion: [46.879966, -121.726909],
+    radius: 200}
 
   constructor(
     private userService: UserService,
@@ -54,7 +55,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.webSocketService.connect(this.authService.username).subscribe((data) => {
       console.log(data);
     });
-  this.renderMap = true;
+    this.findMe();
+    this.renderMap = true;
   }
 
   ngOnDestroy() {
@@ -62,8 +64,53 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   sendMessage() {
-    this.layers.push(marker([ 46.979966, -121.726909 ]))
-    this.webSocketService.sendUpdates("settings");
+
+    this.layers.push(marker([ 46.979966, -121.726909 ]));
+    this.layers.push(circle([ 46.95, -122 ], { radius: 5000 }));
+    this.layers.push(polygon([[ 46.8, -121.85 ], [ 46.92, -121.92 ], [ 46.87, -121.8 ]]));
+
+    // this.webSocketService.sendUpdates("settings");
+  }
+
+  setLayers() {
+    this.layers = [circle(this.myLocation.postion, this.myLocation.radius ,{color: "red"})]
+  }
+
+  trackMe() {
+
+    if(this.isTracking)
+    {
+      navigator.geolocation.clearWatch(this.trackingID);
+      this.isTracking = false;
+      // alert("Stop traing my postion")
+    } else {
+      if (navigator.geolocation) {
+      this.isTracking = true;
+      this.trackingID = navigator.geolocation.watchPosition((position) => {
+        this.mapCenter = latLng(position.coords.latitude, position.coords.longitude);
+        this.myLocation.postion = [position.coords.latitude, position.coords.longitude]
+        this.myLocation.radius = position.coords.accuracy;
+        this.setLayers();
+      });
+      // alert("Start traing my postion")
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+    }
+  }
+
+  findMe() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.mapCenter = latLng(position.coords.latitude, position.coords.longitude);
+
+        this.myLocation.postion = [position.coords.latitude, position.coords.longitude]
+        this.myLocation.radius = position.coords.accuracy;
+        this.setLayers();
+      });
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
   }
 
 
