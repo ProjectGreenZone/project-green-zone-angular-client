@@ -73,7 +73,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   setLayers() {
-    this.layers = [circle(this.myLocation.postion, this.myLocation.radius ,{color: "red"})]
+    this.layers = [circle([this.myLocation.postion[0],this.myLocation.postion[1]], this.myLocation.radius ,{color: "red"})]
   }
 
   trackMe() {
