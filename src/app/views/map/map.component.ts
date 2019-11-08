@@ -20,7 +20,7 @@ export class MapComponent implements OnInit, OnDestroy {
   renderMap = true;
   options = {
     layers: [
-      tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 20, attribution: '...' })
+      tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 20, attribution: '...' })
     ],
     zoom: 14,
     center: latLng(46.879966, -121.726909)
