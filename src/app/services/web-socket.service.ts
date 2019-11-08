@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
 export class WebSocketService {
   // Our socket connection
   private socket;
-  private webSocketObservable: Observable<MessageEvent>;
+  private webSocketObservable: Observable<any>;
 
   constructor() {}
 
@@ -44,9 +44,15 @@ export class WebSocketService {
 
     // We define our observable which will observe any incoming messages
     // from our socket.io server.
-    this.webSocketObservable = new Observable<MessageEvent>((subscriber) => {
+    this.webSocketObservable = new Observable<any>((subscriber) => {
       this.socket.on('message', (data) => {
+        data.type = "message";
         console.log("Received message from Websocket Server")
+        subscriber.next(data);
+      });
+      this.socket.on('tracker update', (data) => {
+        data.type = "tracker update";
+        console.log("Received tracker update from Websocket Server")
         subscriber.next(data);
       });
       return () => {
@@ -64,7 +70,6 @@ export class WebSocketService {
 
   sendUpdates(updates) {
     this.socket.emit('settings update', JSON.stringify(updates));
-    this.socket.emit('tracker update', JSON.stringify(updates));
   }
 
   getWebSocketObservable() {

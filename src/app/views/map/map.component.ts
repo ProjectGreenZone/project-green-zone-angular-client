@@ -3,7 +3,8 @@ import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { TrackerService } from '../../services/tracker.service';
 import { WebSocketService } from '../../services/web-socket.service';
-import {tileLayer, latLng, circle, polygon, marker} from 'leaflet';
+import {tileLayer, latLng, circle, polygon, marker, divIcon} from 'leaflet';
+import * as _ from 'lodash';
 
   // host: {
   //   class:'container-fluid'
@@ -27,22 +28,24 @@ export class MapComponent implements OnInit, OnDestroy {
   };
   layersControl = {
     baseLayers: {
-      'Open Street Map': tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' }),
-      'Open Cycle Map': tileLayer('http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
+      'Open Street Map': tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' }),
     },
-    overlays: {
-      'Big Circle': circle([ 46.95, -122 ], { radius: 5000 }),
-      'Big Square': polygon([[ 46.8, -121.55 ], [ 46.9, -121.55 ], [ 46.9, -121.7 ], [ 46.8, -121.7 ]])
-    }
+    // overlays: {
+    //   'Big Circle': circle([ 46.95, -122 ], { radius: 5000 }),
+    //   'Big Square': polygon([[ 46.8, -121.55 ], [ 46.9, -121.55 ], [ 46.9, -121.7 ], [ 46.8, -121.7 ]])
+    // }
   };
 
   layers = [];
+  trackers = [];
+  colors = ['blue','yellow','green', 'purple','black']
+  showPostionLimit = 3;
+  trackerCount = 0
 
   mapCenter = latLng(46.879966, -121.726909);
   isTracking = false;
   trackingID = 0;
-  myLocation = {postion: [46.879966, -121.726909],
-    radius: 200}
+  myPosition = circle([46.879966, -121.726909], 200 , {color: "red"})
 
   constructor(
     private userService: UserService,
@@ -53,7 +56,18 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.webSocketService.connect(this.authService.username).subscribe((data) => {
-      console.log(data);
+      switch(data.type){
+        case "message": {
+          console.log(data);
+          this.trackerService.sendSignalToGetTrackers();
+          break;
+        }
+
+        case "tracker update": {
+          this.updatePositions(data.tracker);
+          break;
+        }
+      }
     });
     this.findMe();
     this.renderMap = true;
@@ -61,6 +75,57 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.webSocketService.disconnect();
+  }
+
+  updatePositions(tracker) {
+    const oldTrackerPositions = _.remove(this.trackers, (t) => t._id === tracker._id)[0];
+
+    const history = _.sortBy(tracker.history, [(h) => h._id]);
+    _.reverse(history);
+
+    const newTrackerPositions = {
+      _id: tracker._id,
+      color: 'blue',
+      battery: history[0].battery,
+      time: history[0]._id,
+      latestPostion: history[0].position,
+      positions: []
+    };
+
+    if (oldTrackerPositions) {
+      newTrackerPositions.color = oldTrackerPositions.color;
+    } else {
+      newTrackerPositions.color = this.colors[this.trackerCount % this.colors.length]
+      this.trackerCount++;
+    }
+
+    let hcount = 1;
+    for (const h of tracker.history) {
+      let labelClassName = 'postion-label';
+      if (hcount === 1) {
+        labelClassName = 'postion-label-latest';
+      }
+      // const time = Date(h._id);
+      const label = tracker._id + '|' + h._id;
+
+      const newCircle = circle([h.position.lat, h.position.lon], h.position.accuracy, {color: newTrackerPositions.color});
+
+      const newMarker = marker([h.position.lat, h.position.lon], {icon: divIcon({html:label, className: labelClassName})});
+
+
+      newTrackerPositions.positions.push(newCircle);
+      newTrackerPositions.positions.push(newMarker);
+
+      if(hcount >= this.showPostionLimit){
+        break;
+      }
+      hcount++;
+    }
+
+    this.trackers.push(newTrackerPositions);
+
+    this.setLayers();
+
   }
 
   sendMessage() {
@@ -73,7 +138,17 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   setLayers() {
-    this.layers = [circle([this.myLocation.postion[0],this.myLocation.postion[1]], this.myLocation.radius ,{color: "red"})]
+    let layers = [this.myPosition];
+
+    for (const t of this.trackers) {
+      layers = layers.concat(t.positions);
+    }
+    this.layers = layers;
+  }
+  focusMe(event) {
+    console.log(event.target);
+    const tracker = _.find(this.trackers, { _id: event.target.id});
+    this.mapCenter = latLng(tracker.latestPostion.lat, tracker.latestPostion.lon);
   }
 
   trackMe() {
@@ -88,8 +163,8 @@ export class MapComponent implements OnInit, OnDestroy {
       this.isTracking = true;
       this.trackingID = navigator.geolocation.watchPosition((position) => {
         this.mapCenter = latLng(position.coords.latitude, position.coords.longitude);
-        this.myLocation.postion = [position.coords.latitude, position.coords.longitude]
-        this.myLocation.radius = position.coords.accuracy;
+        this.myPosition.setRadius(position.coords.accuracy);
+        this.myPosition.setLatLng([position.coords.latitude, position.coords.longitude])
         this.setLayers();
       });
       // alert("Start traing my postion")
@@ -104,8 +179,8 @@ export class MapComponent implements OnInit, OnDestroy {
       navigator.geolocation.getCurrentPosition((position) => {
         this.mapCenter = latLng(position.coords.latitude, position.coords.longitude);
 
-        this.myLocation.postion = [position.coords.latitude, position.coords.longitude]
-        this.myLocation.radius = position.coords.accuracy;
+        this.myPosition.setRadius(position.coords.accuracy);
+        this.myPosition.setLatLng([position.coords.latitude, position.coords.longitude])
         this.setLayers();
       });
     } else {

@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+.postion-label {
+  font-size: medium;
+  color: black;
+}
+
+.postion-label-latest {
+  font-size: large;
+  color: black;
+}
