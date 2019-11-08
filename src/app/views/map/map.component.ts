@@ -106,7 +106,8 @@ export class MapComponent implements OnInit, OnDestroy {
         labelClassName = 'postion-label-latest';
       }
       const time = new Date(h._id);
-      const label = tracker._id + '|' + time;
+      const month = time.getMonth() +1;
+      const label = tracker._id + '|' +month+"."+ time.getDate() +"-"+ time.getHours()+"."+time.getMinutes();
 
       const newCircle = circle([h.position.lat, h.position.lon], h.position.accuracy, {color: newTrackerPositions.color});
 
