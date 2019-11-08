@@ -87,7 +87,7 @@ export class MapComponent implements OnInit, OnDestroy {
       _id: tracker._id,
       color: 'blue',
       battery: history[0].battery,
-      time: history[0]._id,
+      time: new Date(history[0]._id),
       latestPostion: history[0].position,
       positions: []
     };
@@ -105,8 +105,8 @@ export class MapComponent implements OnInit, OnDestroy {
       if (hcount === 1) {
         labelClassName = 'postion-label-latest';
       }
-      // const time = Date(h._id);
-      const label = tracker._id + '|' + h._id;
+      const time = new Date(h._id);
+      const label = tracker._id + '|' + time;
 
       const newCircle = circle([h.position.lat, h.position.lon], h.position.accuracy, {color: newTrackerPositions.color});
 
