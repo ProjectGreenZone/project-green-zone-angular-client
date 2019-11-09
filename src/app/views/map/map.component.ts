@@ -100,29 +100,49 @@ export class MapComponent implements OnInit, OnDestroy {
       this.trackerCount++;
     }
 
-    let hcount = 1;
-    for (const h of tracker.history) {
+    for (let i = 0; i < this.showPostionLimit; i++) {
       let labelClassName = 'postion-label';
-      if (hcount === 1) {
+      if (i === 0) {
         labelClassName = 'postion-label-latest';
       }
+      const h = tracker.history[i]
       const time = new Date(h._id);
-      const month = time.getMonth() +1;
-      const label = tracker._id + '|' +month+"."+ time.getDate() +"-"+ time.getHours()+"."+time.getMinutes();
+      const month = time.getMonth() + 1;
+      const label = tracker._id + '|' + month + '.' + time.getDate() + '-' + time.getHours() + '.' + time.getMinutes();
 
       const newCircle = circle([h.position.lat, h.position.lon], h.position.accuracy, {color: newTrackerPositions.color});
 
-      const newMarker = marker([h.position.lat, h.position.lon], {icon: divIcon({html:label, className: labelClassName})});
+      const newMarker = marker([h.position.lat, h.position.lon], {icon: divIcon({html: label, className: labelClassName})});
 
 
       newTrackerPositions.positions.push(newCircle);
       newTrackerPositions.positions.push(newMarker);
 
-      if(hcount >= this.showPostionLimit){
-        break;
-      }
-      hcount++;
     }
+
+    // let hcount = 1;
+    // for (const h of tracker.history) {
+    //   let labelClassName = 'postion-label';
+    //   if (hcount === 1) {
+    //     labelClassName = 'postion-label-latest';
+    //   }
+    //   const time = new Date(h._id);
+    //   const month = time.getMonth() +1;
+    //   const label = tracker._id + '|' +month+"."+ time.getDate() +"-"+ time.getHours()+"."+time.getMinutes();
+
+    //   const newCircle = circle([h.position.lat, h.position.lon], h.position.accuracy, {color: newTrackerPositions.color});
+
+    //   const newMarker = marker([h.position.lat, h.position.lon], {icon: divIcon({html:label, className: labelClassName})});
+
+
+    //   newTrackerPositions.positions.push(newCircle);
+    //   newTrackerPositions.positions.push(newMarker);
+
+    //   if(hcount >= this.showPostionLimit){
+    //     break;
+    //   }
+    //   hcount++;
+    // }
 
     this.trackers.push(newTrackerPositions);
 
