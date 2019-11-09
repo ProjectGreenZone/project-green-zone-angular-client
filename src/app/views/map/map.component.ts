@@ -81,7 +81,7 @@ export class MapComponent implements OnInit, OnDestroy {
     const oldTrackerPositions = _.remove(this.trackers, (t) => t._id === tracker._id)[0];
 
     const history = _.sortBy(tracker.history, [(h) => h._id]);
-    _.reverse(history);
+    // _.reverse(history);
 
     const newTrackerPositions = {
       _id: tracker._id,
