@@ -27,3 +27,14 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Documentation
+### tech used :
+- rxjs
+- socket.io client
+- leaflet : mapping solution
+### services :
+All services produce observables  
+- auth service : call backend '/login' endpoint and stores jwt
+- user service : regiser users : add trackers
+- web-socket service : connects to 'webapp_io' and get tracker details 
